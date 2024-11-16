@@ -259,7 +259,7 @@ void MQTTClientComponent::start_connect_() {
   const char *password = nullptr;
   if (!this->credentials_.password.empty())
     password = this->credentials_.password.c_str();
-
+  ESP_LOGI(TAG, "password: %s", password);
   this->mqtt_backend_.set_credentials(username, password);
 
   this->mqtt_backend_.set_server(this->credentials_.address.c_str(), this->credentials_.port);

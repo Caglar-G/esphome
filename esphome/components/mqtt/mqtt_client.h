@@ -262,6 +262,14 @@ class MQTTClientComponent : public Component {
   void set_clean_session(const bool &clean_session) { this->credentials_.clean_session = clean_session; }
   void set_on_connect(mqtt_on_connect_callback_t &&callback);
   void set_on_disconnect(mqtt_on_disconnect_callback_t &&callback);
+  
+  #if defined(USE_ESP32)
+    MQTTBackendESP32 mqtt_backend_;
+  #elif defined(USE_ESP8266)
+    MQTTBackendESP8266 mqtt_backend_;
+  #elif defined(USE_LIBRETINY)
+    MQTTBackendLibreTiny mqtt_backend_;
+  #endif
 
  protected:
   void send_device_info_();
@@ -310,13 +318,7 @@ class MQTTClientComponent : public Component {
   int log_level_{ESPHOME_LOG_LEVEL};
 
   std::vector<MQTTSubscription> subscriptions_;
-#if defined(USE_ESP32)
-  MQTTBackendESP32 mqtt_backend_;
-#elif defined(USE_ESP8266)
-  MQTTBackendESP8266 mqtt_backend_;
-#elif defined(USE_LIBRETINY)
-  MQTTBackendLibreTiny mqtt_backend_;
-#endif
+
 
   MQTTClientState state_{MQTT_CLIENT_DISABLED};
   network::IPAddress ip_;
